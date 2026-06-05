@@ -1,0 +1,4 @@
+predictor,pearson_r,ols_slope,ols_intercept,r_squared,n_valid
+NDVI,-0.0683,-7.5016,30.3541,0.0047,23743
+Population Density,0.2515,0.0082,28.6515,0.0632,20849
+Built-up Indicator,0.3783,3.2353,28.9902,0.1431,20082

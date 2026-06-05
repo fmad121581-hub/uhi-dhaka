@@ -1,0 +1,204 @@
+admin_name,district,division,pixel_count,mean_lst,min_lst,max_lst,std_lst
+Ward No-90,Shyampur,,1060,34.3,31.54,37.39,1.11
+Ward No-58,Hazaribagh,,1656,34.22,31.58,38.66,1.35
+Ward No-60,Lalbagh,,479,34.21,32.34,37.03,1.02
+Ward No-88,Kadamtali,,491,34.03,32.02,37.2,0.91
+Ward No-87,Shyampur,,731,34.02,32.15,35.48,0.68
+Ward No-65,Chak Bazar,,611,34.02,30.85,36.35,0.98
+Ward No-84,Jatrabari,,798,33.95,32.35,36.22,0.72
+Ward No-48 (Part),Hazaribagh,,2974,33.92,26.46,37.81,1.6
+Ward No-92,Lalbagh,,790,33.81,32.28,36.86,0.71
+Ward No-91,Lalbagh,,1357,33.75,30.1,36.22,0.71
+Ward No-76 (Part),Jatrabari,,63,33.71,32.88,34.75,0.48
+Ward No-05,Pallabi,,1530,33.67,31.89,35.88,0.75
+Ward No-20 (Part),Tejgaon Ind. Area,,73,33.66,32.98,34.53,0.37
+Ward No-66 (Part),Chak Bazar,,280,33.64,31.34,36.21,0.88
+Ward No-31,Motijheel,,1087,33.62,30.89,36.45,1.14
+Ward No-38 (Part),Tejgaon Ind. Area,,379,33.5,32.03,35.39,1.0
+Ward No-86,Jatrabari,,883,33.42,27.79,37.37,1.37
+Ward No-89,Kadamtali,,726,33.36,31.32,35.43,0.8
+Ward No-85,Jatrabari,,1302,33.31,28.89,37.46,1.52
+Ward No-83,Shyampur,,759,33.29,30.11,36.41,0.97
+Sultanganj,Kamrangir Char,,1796,33.18,26.45,35.49,2.08
+Ward No-30,Sabujbagh,,466,33.09,30.67,36.84,1.0
+Ward No-03,Pallabi,,1095,33.09,31.44,35.25,0.65
+Ward No-75,Sutrapur,,584,33.09,31.63,36.84,0.84
+Subhadya (Part),Keraniganj,,14193,33.03,25.89,39.01,2.14
+Ward No-74,Sutrapur,,469,33.02,32.09,34.31,0.52
+Ward No-37,Tejgaon Ind. Area,,3204,33.02,26.08,37.2,2.13
+Ward No-43,Adabor,,2026,33.02,29.8,35.62,0.94
+Ward No-46,Adabor,,520,32.96,31.41,34.99,0.9
+Ward No-09,Darus Salam,,2263,32.95,27.45,37.14,1.4
+Ward No-10,Darus Salam,,2051,32.95,29.1,36.11,1.05
+Ward No-16,Kafrul,,4301,32.92,28.13,36.21,1.16
+Ward No-81,Gendaria,,660,32.88,31.31,35.14,0.89
+Ward No-71 (Part),Bangshal,,276,32.82,32.18,34.01,0.41
+Ward No-47(part),Mohammadpur,,1089,32.81,29.94,35.97,1.33
+Ward No-32,Motijheel,,1166,32.77,28.57,36.12,0.97
+Ward No-61,Lalbagh,,445,32.74,31.38,35.04,0.66
+Ward No-98 (rest. Area),Biman Bandar,,6133,32.72,28.09,36.01,1.29
+Dhania(part),Jatrabari,,1061,32.72,31.43,35.52,0.59
+Ward No-70,Bangshal,,382,32.71,31.65,33.91,0.44
+Ward No-73,Kotwali,,401,32.7,30.63,34.49,0.77
+Aganagar,Keraniganj,,1746,32.66,26.72,35.48,1.42
+Ward No-76 (Part),Gendaria,,534,32.64,31.01,35.17,0.86
+Ward No-66 (Part),Bangshal,,97,32.63,31.17,33.84,0.53
+Ward No-15 (part),Kafrul,,3093,32.62,27.82,36.92,1.22
+Ward No-80 (Part),Gendaria,,69,32.61,31.14,34.25,0.64
+Ward No-47 (Part),Dhanmondi,,386,32.61,31.68,33.88,0.42
+Ward No-14 (part),Kafrul,,1212,32.53,31.49,33.69,0.38
+Ward No-48 (Part),Dhanmondi,,441,32.52,29.94,36.4,1.12
+Ward No-04,Kafrul,,1727,32.49,28.54,35.34,1.0
+Ward No-29,Sabujbagh,,682,32.48,30.62,36.38,0.82
+Ward No-79,Sutrapur,,496,32.47,29.58,34.67,0.77
+Ward No-42,Mohammadpur,,674,32.47,30.98,34.35,0.58
+Matuail (part),Jatrabari,,9554,32.45,26.83,39.81,1.7
+Ward No-64,Chak Bazar,,255,32.45,31.46,33.07,0.33
+Ward No-14 (part),Mirpur,,862,32.45,31.7,33.78,0.35
+Ward No-11,Mirpur,,1131,32.42,29.66,36.07,0.79
+Ward No-71 (Part),Kotwali,,29,32.41,31.97,33.25,0.31
+Ward No-36,Paltan,,1422,32.39,30.29,36.56,0.97
+Badda,Badda,,3763,32.38,27.76,36.89,1.26
+Ward No-13,Mirpur,,2312,32.38,30.25,34.38,0.56
+Ward No-77,Sutrapur,,445,32.38,31.17,33.86,0.44
+Ward No-38 (Part),Tejgaon,,994,32.37,29.97,33.71,0.71
+Ward No-20 (Part),Gulshan,,2082,32.35,28.39,35.1,1.02
+Bhatara,Badda,,7059,32.33,28.74,37.48,1.1
+Ward No-39,Tejgaon,,1278,32.32,27.9,34.56,0.9
+Ward No-44,Mohammadpur,,612,32.31,31.45,33.33,0.34
+Ward No-68 (Part),Kotwali,,201,32.31,30.62,33.45,0.41
+Ward No-41,Sher-e-bangla Nagar,,1661,32.3,29.92,34.1,0.64
+Ward No-35,Motijheel,,580,32.3,30.78,33.9,0.61
+Ward No-80 (Part),Sutrapur,,136,32.3,31.06,33.36,0.56
+Ward No-25,Khilgaon,,1057,32.28,30.7,35.35,0.68
+Ward No-59,Lalbagh,,591,32.27,30.12,34.57,0.66
+Ward No-82,Gendaria,,461,32.27,28.85,34.34,0.75
+Ward No-07 (Part),Mirpur,,1086,32.25,30.52,33.88,0.51
+Ward No-69,Bangshal,,416,32.24,31.54,33.74,0.35
+Ward No-24,Khilgaon,,1029,32.23,28.27,34.47,0.62
+Ward No-72,Kotwali,,213,32.21,31.77,33.42,0.35
+Ward No-12,Mirpur,,1792,32.21,29.8,34.86,0.74
+Ward No-78,Sutrapur,,309,32.18,30.97,33.57,0.44
+Ward No-46,Mohammadpur,,3473,32.16,27.08,35.4,1.29
+Ward No-63 (Part),Bangshal,,93,32.16,31.6,32.93,0.31
+Ward No-67 (part),Bangshal,,190,32.15,31.41,32.97,0.38
+Ward No-68 (part),Bangshal,,164,32.15,31.67,33.09,0.34
+Ward No-50,Kalabagan,,791,32.14,31.14,33.53,0.42
+Tegharia,Keraniganj,,21114,32.11,-93.12,38.57,4.23
+Kalindi,Keraniganj,,7803,32.1,26.09,37.14,2.01
+Ward No-27,Sabujbagh,,1093,32.1,30.77,33.91,0.49
+Ward No-40 (Part),Tejgaon,,482,32.05,31.06,33.73,0.47
+Ward No-51 (Part),Kalabagan,,675,32.02,31.18,32.87,0.35
+Ward No-23,Rampura,,871,32.02,28.89,33.84,0.7
+Ward No-34,Motijheel,,828,31.99,30.12,34.01,0.52
+Ward No-67 (Part),Chak Bazar,,313,31.99,29.53,33.1,0.72
+Ward No-26,Khilgaon,,2262,31.97,29.33,35.31,1.14
+Ward No-33,Motijheel,,479,31.96,30.92,33.17,0.49
+Ward No-63 (Part),Chak Bazar,,360,31.93,30.91,32.87,0.45
+Ward No-46 (Part),Hazaribagh,,1660,31.92,26.83,35.86,1.27
+Ward No-56 (Part),Lalbagh,,69,31.92,30.99,32.88,0.39
+Ward No-51(part),Mohammadpur,,484,31.92,30.86,33.14,0.45
+Ward No-45,Mohammadpur,,1507,31.88,29.58,34.02,0.64
+Ward No-55,Ramna,,830,31.84,26.13,34.18,1.32
+Ward No-21,Badda,,1719,31.83,26.53,34.96,1.32
+Beraid,Badda,,14045,31.79,-93.71,36.1,4.61
+Ward No-40 (Part),Sher-e-bangla Nagar,,3256,31.78,27.96,39.97,1.32
+Ward No-06,Pallabi,,4983,31.78,26.11,35.27,1.33
+Ward No-01,Biman Bandar,,164,31.78,30.67,33.08,0.56
+Dhania(part),Kadamtali,,1734,31.69,29.85,34.29,0.65
+Ward No-52,New Market,,1821,31.68,27.98,35.02,1.13
+Ward No-49,Dhanmondi,,2367,31.67,27.49,33.62,0.81
+Shyampur,Kadamtali,,5351,31.64,-79.57,38.59,5.53
+Ward No-62,Lalbagh,,1008,31.64,30.07,33.06,0.61
+Ward No-18,Gulshan,,1570,31.64,27.24,34.51,0.95
+Ward No-28,Sabujbagh,,1199,31.64,28.65,33.16,0.61
+Ward No-56(part),Shahbagh,,3092,31.63,27.65,35.08,1.01
+Zinjira,Keraniganj,,2722,31.63,26.21,35.72,2.22
+Ward No-02,Pallabi,,2800,31.63,26.3,35.4,1.57
+Ward No-22,Rampura,,2552,31.62,26.03,35.07,1.36
+Ward No-57,Shahbagh,,1358,31.61,28.77,33.43,0.69
+Ward No-54,Ramna,,1039,31.59,26.94,33.81,1.24
+Dakshingaon (Part),Khilgaon,,3950,31.46,27.95,35.43,1.23
+Manda,Sabujbagh,,1524,31.46,28.47,33.9,1.18
+Ward No-53,Ramna,,1952,31.41,28.9,33.6,0.67
+Konda,Keraniganj,,31969,31.38,-100.37,38.65,5.63
+Ward No-98 (Rest. Area),Cantonment,,8502,31.33,27.84,37.15,1.17
+Harirampur (Part),Turag,,27938,31.31,-100.83,40.42,3.97
+Amin Bazar,Savar,,8763,31.17,26.18,37.3,2.33
+Ward No-15 (part),Cantonment,,3663,31.13,27.3,34.66,1.25
+Ward No-17 (Part),Khilkhet,,4801,31.12,27.88,33.91,0.91
+Ward No-17 (Part),Badda,,3593,31.07,28.47,35.38,1.39
+Tetuljhora,Savar,,22339,30.96,-122.83,38.91,4.18
+Basta,Keraniganj,,25888,30.91,-83.56,37.33,3.23
+Satarkul,Badda,,10538,30.9,25.85,35.52,2.15
+Sakta,Keraniganj,,20365,30.89,26.02,35.35,1.49
+Ward No-15 (part),Pallabi,,1637,30.78,27.6,33.43,0.96
+Ward No-19,Gulshan,,6032,30.78,26.0,36.79,1.46
+Saralia,Demra,,8347,30.73,-90.86,39.74,6.54
+Ward No-08,Shah Ali,,4199,30.73,26.11,41.89,2.22
+Dakshinkhan (part),Biman Bandar,,2642,30.66,27.71,33.54,1.09
+Matuail (part),Demra,,2172,30.64,-67.01,35.55,5.55
+Ward No-01,Uttara,,7787,30.64,-92.03,34.66,5.13
+Taranagar,Keraniganj,,21280,30.36,26.84,36.69,1.48
+Dhamrai Paurashava,Dhamrai,,6396,30.35,25.9,40.95,1.54
+Savar Paurashava,Savar,,22387,30.32,-59.86,36.94,2.74
+Dumni,Khilkhet,,5695,30.3,-87.08,35.06,5.64
+Ashulia,Savar,,30218,30.28,-91.62,38.63,3.27
+Dakshingaon (Part),Sabujbagh,,2297,30.23,27.35,35.06,1.43
+Dakshinkhan (part),Khilkhet,,6928,30.22,-8.43,34.14,1.41
+Matuail (part),Kadamtali,,1591,30.22,-86.71,34.54,6.53
+Dakshinkhan (Part),Dakshinkhan,,8918,30.06,-85.38,33.15,3.06
+Biralia,Savar,,32843,29.89,25.82,38.23,1.93
+Bhakurta,Savar,,20550,29.75,25.76,35.95,1.33
+Demra (part),Demra,,14403,29.67,-95.45,37.84,5.17
+Dhamsana,Savar,,37262,29.65,-107.41,41.34,3.91
+Banagram,Savar,,18804,29.53,25.95,38.22,1.58
+Kalatia,Keraniganj,,21492,29.51,25.76,35.18,1.17
+Ruhitpur,Keraniganj,,20091,29.5,-95.11,38.08,4.21
+Kaundia,Savar,,13753,29.39,25.71,35.38,2.24
+Yearpur,Savar,,29401,29.35,-107.2,38.47,5.41
+Kailail,Nawabganj,,39010,29.23,-96.86,35.35,3.56
+Savar,Savar,,8598,29.2,26.49,34.07,1.39
+Pathalia(part),Savar,,32285,29.14,25.98,37.61,1.54
+Baruakhali,Nawabganj,,12357,29.11,26.97,33.61,0.98
+Hazratpur,Keraniganj,,23617,29.01,-104.98,35.44,4.82
+Dohar Paurashava,Dohar,,14325,28.96,27.21,34.32,0.97
+Barrah,Nawabganj,,19158,28.96,25.64,34.87,0.83
+Bilaspur,Dohar,,11261,28.92,23.81,36.27,1.73
+Kulla,Dhamrai,,38567,28.92,-99.23,35.86,2.42
+Jantrail,Nawabganj,,21274,28.91,25.95,32.58,0.81
+Kalakopa,Nawabganj,,6982,28.89,26.67,32.62,0.93
+Bandura,Nawabganj,,16650,28.88,26.38,33.45,0.92
+Suti Para,Dhamrai,,26752,28.87,-95.72,39.36,3.51
+Kushumhati,Dohar,,20089,28.81,-65.2,35.62,2.33
+Nasirabad,Khilgaon,,7079,28.74,-85.78,34.7,4.53
+Sholla,Nawabganj,,44891,28.72,-109.83,35.09,5.26
+Joykrishnapur,Nawabganj,,18199,28.71,-112.39,35.53,6.21
+Sombhag,Dhamrai,,24244,28.69,25.99,36.71,1.29
+Nannar,Dhamrai,,18126,28.67,26.02,33.48,1.15
+Bakshanagar,Nawabganj,,10311,28.64,26.21,33.77,0.96
+Sutar Para,Dohar,,17521,28.62,23.95,31.86,0.85
+Dhamrai,Dhamrai,,6195,28.55,26.09,32.37,1.07
+Nayansree,Nawabganj,,25658,28.54,-114.4,47.36,4.46
+Bhararia,Dhamrai,,17429,28.49,26.1,32.72,0.97
+Roypara,Dohar,,5140,28.49,27.47,31.75,0.64
+Suapur,Dhamrai,,16266,28.42,-106.0,33.28,4.09
+Shikari Para,Nawabganj,,12947,28.39,-108.64,32.51,5.39
+Rowail,Dhamrai,,27839,28.29,-121.34,32.53,5.89
+Galimpur,Nawabganj,,10552,28.27,26.02,32.48,1.0
+Agla,Nawabganj,,16419,28.24,-107.63,32.65,4.44
+Uttar Khan,Uttar Khan,,22535,28.23,-107.66,34.28,5.28
+Sanora,Dhamrai,,19668,28.12,25.76,32.38,0.89
+Shimulia,Savar,,40514,28.1,-117.18,37.52,5.8
+Kushura,Dhamrai,,27247,28.04,-111.34,51.47,3.09
+Gangutia,Dhamrai,,15493,27.95,-109.87,36.34,6.48
+Churain,Nawabganj,,23595,27.83,-99.16,31.94,3.89
+Narisha,Dohar,,20510,27.73,-112.12,36.13,3.89
+Balia,Dhamrai,,16868,27.69,-80.47,32.38,3.57
+Amta,Dhamrai,,11530,27.39,-110.42,31.91,5.96
+Jadabpur,Dhamrai,,21676,27.38,-114.82,50.51,5.89
+Baisakanda,Dhamrai,,20290,27.27,-123.21,42.16,6.74
+Chauhat,Dhamrai,,23083,26.96,-106.61,32.03,8.13
+Nayabari,Dohar,,14743,26.84,-118.09,36.23,6.54
+Mahmudpur,Dohar,,41173,26.8,-96.02,38.06,6.5
+Muksudpur,Dohar,,16793,26.73,-111.55,33.41,6.92
