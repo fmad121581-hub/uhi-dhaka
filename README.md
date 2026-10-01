@@ -7,7 +7,7 @@ Python · rasterio · geopandas · scikit-learn · esda · Landsat 8/9 · ESA Wo
 
 ## The short version
 
-I used free satellite data to measure how much hotter built-up Dhaka is than its green fringe, which wards stay hot in every season, and what explains the pattern. It is a reproducible pipeline of eleven scripts, about 1,480 km² and 196 wards, five Landsat dates from February 2022 to June 2026.
+I used free satellite data to measure how much hotter built-up Dhaka is than its green fringe, which wards stay hot in every season, and what explains the pattern. It is a reproducible pipeline of thirteen scripts, about 1,480 km² and 196 wards, five Landsat dates from February 2022 to June 2026.
 
 | Question | Answer |
 |---|---|
@@ -15,8 +15,9 @@ I used free satellite data to measure how much hotter built-up Dhaka is than its
 | Does vegetation cool the surface? | Yes. NDVI vs LST on land pixels: **r = -0.59 to -0.65** on four of five dates |
 | Is the heat spatially random? | No. Ward Moran's I = **0.84** (p = 0.001); 45 hot and 45 cold wards at p < 0.05 |
 | Which wards are always hot? | **Shyampur (Ward 90), Lalbagh (Ward 60), Sultanganj Kamrangir Char**: top 10% on all five dates, 81 to 99% built-up |
-| How many people live in the hottest areas? | About **25%** of the study-area population lives in the hottest decile of pixels (WorldPop 2020) |
-| What explains pixel temperature? | Distance from the centre (0.43), local built-up share (0.18), NDVI (0.12) |
+| How many people live in the hottest areas? | **40 to 56%** of the study-area population lives in pixels more than 1 SD above that date's mean LST, and **23 to 39%** in the hottest decile (WorldPop 2020; range over five dates) |
+| What explains pixel temperature? | Local built-up share and NDVI in every warm-season scene. Distance from the centre dominates only in the dry February scene (importance 0.43, versus 0.04 to 0.21 on the other dates). Spatial-CV R² 0.63 to 0.78 |
+| Does satellite LST match real air temperature? | It tracks it across seasons: **r = 0.97** against ERA5-Land air temperature at the overpass (n = 5 dates). LST runs 3 to 10 °C above air, the normal daytime offset. A NOAA station report on 7 May 2025 agrees (air 31.8 °C, LST 38.2 °C within 5 km of the airport) |
 
 The heat island is not one number. Intensity ran from 2.9 °C in a dry February scene to 7.1 °C at monsoon onset, so a single-date figure would have been misleading.
 
@@ -27,7 +28,9 @@ The heat island is not one number. Intensity ran from 2.9 °C in a dry February 
 | ![Ward hotspots](data/output_v2/fig_ward_hotspots.png) | ![Persistent hotspots](data/output_v2/fig_persistent_hotspots.png) |
 | Ward mean LST and Gi* hotspots (24 Feb 2022) | Wards in the top decile on every date |
 | ![Seasonal comparison](data/output_v2/fig_multidate.png) | ![Drivers](data/output_v2/fig_rf_drivers.png) |
-| SUHI, NDVI-LST correlation and mean LST by date | Random Forest driver ranking, spatial vs random CV |
+| SUHI, NDVI-LST correlation and mean LST by date | Random Forest driver ranking, spatial vs random CV (24 Feb 2022) |
+| ![Robustness](data/output_v2/fig_robustness.png) | ![Validation](data/output_v2/fig_validation.png) |
+| Exposure and drivers repeated on all five dates | LST against air temperature at the overpass |
 
 ## Dates used
 
@@ -67,9 +70,10 @@ Full write-up: [`METHODS_RESULTS_draft.md`](METHODS_RESULTS_draft.md).
 
 ## Limits worth knowing
 
-- Daytime surface temperature at about 10:30 local time, not air temperature. There is no ground validation yet.
+- Daytime surface temperature at about 10:30 local time, not air temperature.
+- Validation is thin: ERA5-Land is a 9 km reanalysis, not a station, and NOAA had a station report for only one of the five dates. With n = 5, r = 0.97 shows the seasonal signal is right, not that every pixel is.
 - Five dates, no mid-monsoon coverage, so seasonal means are not estimated.
-- The exposure and Random Forest results come from the February 2022 scene only.
+- Driver rankings change with season (see the robustness figure), so no single ranking should be quoted without its date.
 - Distance from the centre is a proxy for building height, albedo and anthropogenic heat, which I did not measure.
 - The 2004-2023 rainfall trend (`08_rainfall_analysis.py`) leans on one extreme year (2017) and is context only.
 
@@ -83,6 +87,8 @@ python 01_preprocess.py && python 02_lst_derivation.py && python 03_ndvi.py \
   && python 04_lulc_reclassify.py && python 05_zonal_stats.py && python 06_correlation.py
 python 07_maps.py && python 08_rainfall_analysis.py
 python 09_deep_analysis.py && python 10_multitemporal.py && python 11_persistent_hotspots.py
+for d in 2022-02-24 2025-05-07 2025-10-22 2026-02-19 2026-06-03; do python 12_robustness.py $d; done
+python 12_robustness.py --plot && python 13_validation.py
 ```
 
 | Data | Source | Where it goes |
@@ -99,7 +105,7 @@ Raw rasters are not in the repository (several GB). `10_multitemporal.py` picks 
 ## Repository layout
 
 ```
-scripts/    01-11 numbered pipeline + uhi_common.py
+scripts/    01-13 numbered pipeline + uhi_common.py
 data/output_v2/   figures and CSVs (current results)
 data/output_v1/   first-version outputs, kept for comparison
 CHANGELOG_v2.md   bug list and before/after numbers

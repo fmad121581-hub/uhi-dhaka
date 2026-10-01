@@ -17,16 +17,18 @@ SUHI intensity is the mean LST of dense built-up land (built-up pixel with at le
 
 **Spatial structure.** Ward mean LST is strongly clustered (Moran's I = 0.84, p = 0.001; 196 wards with enough land pixels). Gi* identified 45 hot and 45 cold wards at p < 0.05, with the hot cluster in the southern core around Old Dhaka, Shyampur and Kadamtali. LST falls from about 30.4 C within 6 km of the centre to 26.9 C beyond 40 km.
 
-**Drivers.** The Random Forest explained R2 = 0.65 under spatial block cross-validation and 0.75 under random k-fold, so random splitting overstates skill by about 0.10. Permutation importance ranked distance from the centre (0.43), local built-up fraction at 330 m (0.18) and NDVI (0.12) highest. Distance from the centre partly stands in for urban form variables that were not measured (building height, surface albedo, anthropogenic heat), so it should not be read as a causal driver.
+**Drivers.** On 24 Feb 2022 the Random Forest explained R2 = 0.65 under spatial block cross-validation and 0.75 under random k-fold, so random splitting overstates skill by about 0.10. Repeating the model on all five dates gave spatial-CV R2 of 0.63 to 0.78. The ranking of drivers is not stable across seasons. Distance from the centre dominated in the dry February 2022 scene (permutation importance 0.43) but fell to 0.04 to 0.21 on the other dates, where local built-up share (0.27 in May, 0.48 in October, 0.47 in June) and NDVI (0.26 in May) led. Distance from the centre partly stands in for urban form variables that were not measured (building height, surface albedo, anthropogenic heat), so it should not be read as a causal driver, and a single-date ranking should not be generalised.
 
-**Exposure.** About 48% of the study-area population lives in pixels at least one standard deviation above the mean LST on 24 Feb 2022 (30.0 C), and 25% in the hottest decile (30.7 C or above).
+**Exposure.** Across the five dates, 40 to 56% of the study-area population lives in pixels at least one standard deviation above that date's mean land LST, and 23 to 39% in the hottest decile. The 24 Feb 2022 values are 48% and 25%.
+
+**Validation against air temperature.** Landsat LST averaged within 5 km of Dhaka airport (WMO 41923) tracked ERA5-Land 2 m air temperature at the overpass time across the five dates (Pearson r = 0.97, Spearman 0.90, n = 5). LST exceeded air temperature by 3.4 C (Feb 2022) to 10.0 C (Jun 2026), mean 6.5 C, the expected daytime surface-air offset that grows with heating. A NOAA synoptic report for the airport was available only for 7 May 2025: air temperature 31.8 C (interpolated to 04:25 UTC) against LST of 38.2 C within 5 km. ERA5-Land is a 9 km reanalysis, so this checks the seasonal signal and offset, not pixel-level accuracy.
 
 **Persistent hotspots.** Ward rankings are stable across dates (Spearman 0.74 to 0.89). Three wards are in the top decile on all five dates: Ward 90 (Shyampur), Ward 60 (Lalbagh) and Sultanganj Kamrangir Char. They are 81 to 99% built-up, hold about 117,000 people, and reach ward-mean LST of 46 to 47 C on 3 Jun 2026. Mean built-up share is 91% in persistent hotspots against 56% in other wards.
 
 ## Limitations to state
 - Daytime (about 10:30 local) surface temperature, not air temperature. Night-time and canopy-layer heat islands can differ.
 - Five dates over four and a half years, with no mid-monsoon coverage; seasonal means are not estimated.
-- The Feb 2022 exposure and driver numbers come from one date and should be repeated on the other dates before publication.
-- No ground validation yet. Matching LST against Bangladesh Meteorological Department station temperature on the scene dates would be the next check.
+- Validation uses a reanalysis grid cell and a single station report (n = 5 dates). Matching LST against Bangladesh Meteorological Department station records on the scene dates would be the stronger check.
+- Driver rankings are season-dependent; report them with their dates.
 - Rainfall (NASA POWER, one grid point) shows a positive 2004-2023 trend (+55 mm/yr, p = 0.04) that depends on a single extreme year (2017); a rank-based test gives p = 0.055. Treat it as context, not a finding.
 - Population is a 2020 model-based estimate redistributed over land cover, not a census count.

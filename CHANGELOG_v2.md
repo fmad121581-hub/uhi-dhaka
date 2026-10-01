@@ -56,3 +56,8 @@ Dropped: 2025-07-10 (0% clear), 2026-06-27 (51%), 2024-09-09 (53%). Mid-monsoon 
 - Ward LST rank agreement across all 5 dates: Spearman 0.74 to 0.89. Three wards are in the top decile on every date (`persistent_hotspots.csv`).
 - NDVI-LST r is -0.59 to -0.65 on four of five dates; post-monsoon (-0.38) is weaker, plausibly because crops/wet soil decouple NDVI from surface temperature.
 - Before the cloud buffer, 2024-09-09 gave SUHI = 11.1 C. That was thin-cloud contamination, not a real signal, which is why the buffer and the 60% rule exist.
+
+## Robustness and validation (`12_robustness.py`, `13_validation.py`)
+- Exposure and Random Forest repeated on all five dates. Spatial-CV R2 0.63 to 0.78. Population above mean + 1 SD: 40 to 56%; in the hottest decile: 23 to 39%.
+- Correction to the earlier single-date reading: distance from the centre ranked first only in Feb 2022 (0.43). On the other dates local built-up share and NDVI led (distance 0.04 to 0.21). The README no longer quotes one ranking.
+- Validation: LST within 5 km of Dhaka airport vs ERA5-Land air temperature at overpass, r = 0.97 (n = 5), LST 3.4 to 10.0 C above air. NOAA station data existed only for 2025-05-07 (air 31.8 C, LST 38.2 C).
