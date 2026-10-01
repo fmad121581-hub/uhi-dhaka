@@ -3,6 +3,8 @@
 **Fahim Ahmed** · Urban and Regional Planning, BUET
 Python · rasterio · geopandas · scikit-learn · esda · Landsat 8/9 · ESA WorldCover · WorldPop
 
+**[Read the one-page case study](https://fmad121581-hub.github.io/uhi-dhaka/)**
+
 ![Summary panel: LST, NDVI, land cover, heat deviation](data/output_v2/uhi_summary_panel.png)
 
 ## The short version
