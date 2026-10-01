@@ -24,7 +24,7 @@ import numpy as np
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOUNDARY  = os.path.join(ROOT, "dhaka_boundary.shp")
 RAW_DIR   = os.path.join(ROOT, "data", "raw")
-PROCESSED = os.path.join(ROOT, "data", "processed")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
 
 # Coordinate reference systems
 WGS84  = "EPSG:4326"   # source CRS of all input data
@@ -44,6 +44,19 @@ RASTERS = {
                        "LC09_L2SP_137044_20220224_20230426_02_T1_SR_B5.TIF"),
     "band10"     : os.path.join(RAW_DIR, "landsat", "scene_01_dhaka",
                        "LC09_L2SP_137044_20220224_20230426_02_T1_ST_B10.TIF"),
+    # Optional: put the matching ..._QA_PIXEL.TIF in the same folder to enable cloud masking
+    "qa_pixel"   : os.path.join(RAW_DIR, "landsat", "scene_01_dhaka",
+                       "LC09_L2SP_137044_20220224_20230426_02_T1_QA_PIXEL.TIF"),
+}
+
+# Resampling per layer. Categorical and integer-DN layers must NOT be bilinear:
+# bilinear on class codes invents classes (10 and 50 blend into 30) and on DNs
+# it blends fill pixels (0) into real edge pixels.
+RESAMPLING = {
+    "lulc": Resampling.nearest, "band4": Resampling.nearest,
+    "band5": Resampling.nearest, "band10": Resampling.nearest,
+    "qa_pixel": Resampling.nearest,
+    "dem": Resampling.bilinear, "population": Resampling.bilinear,
 }
 
 
@@ -55,7 +68,8 @@ def load_boundary_utm():
     return boundary_utm
 
 
-def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N):
+def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N,
+                       resampling=Resampling.bilinear, fill_value=None):
     """
     Clip a raster to the Dhaka boundary, then reproject to dst_crs.
     The boundary is reprojected to match the source raster CRS before clipping,
@@ -70,7 +84,15 @@ def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N):
         geoms = [geom.__geo_interface__ for geom in boundary_matched.geometry]
 
         # mask() clips the raster to the boundary polygon
-        nodata_val = src.nodata if src.nodata is not None else -9999
+        # Unsigned-int rasters cannot hold -9999; Landsat fill is 0 (QA_PIXEL fill is 1)
+        if src.nodata is not None:
+            nodata_val = src.nodata
+        elif fill_value is not None:
+            nodata_val = fill_value
+        elif np.issubdtype(np.dtype(src.dtypes[0]), np.unsignedinteger):
+            nodata_val = 0
+        else:
+            nodata_val = -9999
         clipped_data, clipped_transform = mask(
             src, geoms, crop=True, nodata=nodata_val
         )
@@ -98,9 +120,9 @@ def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N):
         )
 
         # Empty array to receive reprojected pixels
-        reprojected = np.empty(
+        reprojected = np.full(
             (clipped_data.shape[0], new_height, new_width),
-            dtype=clipped_data.dtype
+            nodata_val, dtype=clipped_data.dtype
         )
 
         # Reproject band by band
@@ -112,7 +134,9 @@ def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N):
                 src_crs        = src.crs,
                 dst_transform  = new_transform,
                 dst_crs        = dst_crs,
-                resampling     = Resampling.bilinear
+                src_nodata     = nodata_val,
+                dst_nodata     = nodata_val,
+                resampling     = resampling
             )
 
         # Write the final reprojected raster
@@ -132,6 +156,35 @@ def clip_and_reproject(src_path, dst_path, boundary_wgs84, dst_crs=UTM_45N):
     print(f"  Saved: {os.path.relpath(dst_path, ROOT)}")
 
 
+def merge_lulc_tiles(boundary_wgs84):
+    """
+    ESA WorldCover ships 3x3 degree tiles. The Dhaka boundary reaches 24.04 N, so the
+    N21E090 tile alone leaves a ~59 km2 strip (4% of the area) without land cover.
+    Mosaic every ESA_WorldCover tile in data/raw/lulc/ over the boundary window.
+    """
+    import glob
+    from rasterio.merge import merge
+    from rasterio.features import geometry_mask
+    tiles = sorted(glob.glob(os.path.join(RAW_DIR, "lulc", "ESA_WorldCover*_Map.tif")))
+    if len(tiles) < 2:
+        return RASTERS["lulc"]
+    print(f"  Mosaicking {len(tiles)} WorldCover tiles over the boundary window")
+    minx, miny, maxx, maxy = boundary_wgs84.total_bounds
+    srcs = [rasterio.open(t) for t in tiles]
+    mosaic, tf = merge(srcs, bounds=(minx, miny, maxx, maxy), nodata=0)
+    meta = srcs[0].meta.copy()
+    for sct in srcs: sct.close()
+    outside = geometry_mask([g.__geo_interface__ for g in boundary_wgs84.geometry],
+                            out_shape=mosaic.shape[1:], transform=tf, invert=False)
+    mosaic[:, outside] = 0
+    meta.update(height=mosaic.shape[1], width=mosaic.shape[2], transform=tf, nodata=0, compress="deflate")
+    out = os.path.join(PROCESSED, "_lulc_mosaic_wgs84.tif")
+    os.makedirs(PROCESSED, exist_ok=True)
+    with rasterio.open(out, "w", **meta) as dst:
+        dst.write(mosaic)
+    return out
+
+
 def main():
     print("=" * 60)
     print("Step 1 - Preprocessing: clip + reproject all rasters")
@@ -148,6 +201,8 @@ def main():
     os.makedirs(PROCESSED, exist_ok=True)
     boundary_utm.to_file(boundary_out)
     print(f"  Boundary (UTM) saved: data/processed/dhaka_boundary_utm.shp")
+
+    RASTERS["lulc"] = merge_lulc_tiles(boundary_wgs84)
 
     # Process each raster
     for name, src_path in RASTERS.items():
@@ -167,7 +222,9 @@ def main():
             src_path       = src_path,
             dst_path       = dst_path,
             boundary_wgs84 = boundary_wgs84,
-            dst_crs        = UTM_45N
+            dst_crs        = UTM_45N,
+            resampling     = RESAMPLING.get(name, Resampling.bilinear),
+            fill_value     = 1 if name == "qa_pixel" else None
         )
 
     print("\n" + "=" * 60)

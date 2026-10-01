@@ -1,0 +1,3 @@
+hot_definition,threshold_C,population_total,population_exposed,share_exposed_pct
+LST >= mean+1SD,29.99,13892015.0,6615138.0,47.6182746887207
+LST >= 90th percentile,30.66,13892015.0,3482259.25,25.066625595092773

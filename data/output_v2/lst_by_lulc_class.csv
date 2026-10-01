@@ -1,0 +1,5 @@
+class_code,class_label,pixel_count,mean_lst,min_lst,max_lst,std_lst
+1,Built-up,287303,29.69,21.38,39.97,1.64
+2,Vegetation,1222242,27.85,21.27,50.55,1.61
+3,Water,88753,26.0,21.03,37.58,3.85
+4,Bare soil,18331,29.38,21.31,37.62,2.41

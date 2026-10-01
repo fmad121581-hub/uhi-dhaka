@@ -36,7 +36,7 @@ import matplotlib.colors as mcolors      # for heatmap colour scaling
 ROOT       = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_CSV    = os.path.join(ROOT, "data", "raw", "rainfall",
                            "rainfall_dhaka_monthly_2004_2023.csv")
-OUTPUT     = os.path.join(ROOT, "data", "output")
+OUTPUT     = os.path.join(ROOT, "data", "output_v2")
 RAIN_PNG   = os.path.join(OUTPUT, "rainfall_analysis.png")
 RAIN_CSV   = os.path.join(OUTPUT, "rainfall_annual_seasonal.csv")
 

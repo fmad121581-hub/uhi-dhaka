@@ -39,7 +39,7 @@ import rasterio             # read/write GeoTIFF rasters
 
 # ── Path constants ─────────────────────────────────────────────────────────────
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROCESSED = os.path.join(ROOT, "data", "processed")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
 
 LULC_IN   = os.path.join(PROCESSED, "lulc_clipped_utm.tif")    # ESA original classes
 LULC_OUT  = os.path.join(PROCESSED, "lulc_4class.tif")         # reclassified output

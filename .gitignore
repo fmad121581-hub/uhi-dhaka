@@ -1,5 +1,8 @@
-data/raw/landsat/
-data/raw/lulc/
-data/raw/dem/
-data/raw/population/
+data/raw/*
+!data/raw/rainfall/
 data/processed/
+data/processed_v2/
+data/output/
+data/output_v1/*.tif
+*.log
+__pycache__/

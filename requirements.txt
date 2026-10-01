@@ -1,0 +1,10 @@
+numpy
+pandas
+scipy
+scikit-learn
+rasterio
+geopandas
+pyproj
+libpysal
+esda
+matplotlib

@@ -18,23 +18,28 @@ NDVI (Normalised Difference Vegetation Index) background:
   In UHI studies NDVI is a key predictor: higher vegetation cover correlates
   with lower surface temperatures (urban cooling effect).
 
-Note: Band 4 and Band 5 are Landsat Collection 2 Level-2 Surface Reflectance
-products. They are already atmospherically corrected and stored as uint16 DN.
-The formula works directly on the DN values because the ratio cancels out the
-scale factor (both bands use the same multiplicative rescale factor).
+Note: Band 4 and Band 5 are Collection 2 Level-2 Surface Reflectance (uint16 DN).
+Reflectance = 2.75e-05 * DN - 0.2. The -0.2 offset does NOT cancel in the
+NDVI ratio, so DNs must be converted to reflectance first (v1 skipped this
+and biased NDVI). Fill pixels (DN 0) and out-of-range DNs are masked, and the
+QA_PIXEL cloud mask is applied if available.
 """
 
 import os
 import numpy as np          # array arithmetic on raster data
 import rasterio             # read/write GeoTIFF rasters
+from uhi_common import read_mtl, qa_clear_mask, SR_DN_MIN, SR_DN_MAX
 
 # ── Path constants ─────────────────────────────────────────────────────────────
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROCESSED = os.path.join(ROOT, "data", "processed")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
 
 BAND4_IN  = os.path.join(PROCESSED, "band4_clipped_utm.tif")   # Red band
 BAND5_IN  = os.path.join(PROCESSED, "band5_clipped_utm.tif")   # NIR band
 NDVI_OUT  = os.path.join(PROCESSED, "ndvi.tif")                # output NDVI
+QA_IN     = os.path.join(PROCESSED, "qa_pixel_clipped_utm.tif")
+MTL_FILE  = os.path.join(ROOT, "data", "raw", "landsat", "scene_01_dhaka",
+                         "LC09_L2SP_137044_20220224_20230426_02_T1_MTL.txt")
 
 
 # ── Helper functions ──────────────────────────────────────────────────────────
@@ -61,21 +66,28 @@ def compute_ndvi(band4_path, band5_path, output_path):
         nir  = b5_src.read(1).astype(np.float32)
         nodata_b5 = b5_src.nodata
 
-    # Replace nodata fill values with NaN so they don't corrupt the ratio
-    if nodata_b4 is not None:
-        red[red == nodata_b4] = np.nan
-    if nodata_b5 is not None:
-        nir[nir == nodata_b5] = np.nan
+    mtl = read_mtl(MTL_FILE)
+    mult = float(mtl["REFLECTANCE_MULT_BAND_4"])
+    add  = float(mtl["REFLECTANCE_ADD_BAND_4"])
+    assert mult == float(mtl["REFLECTANCE_MULT_BAND_5"]) and add == float(mtl["REFLECTANCE_ADD_BAND_5"])
+    print(f"  SR scale: reflectance = {mult} * DN + ({add})")
 
-    # ── Compute NDVI ──────────────────────────────────────────────────────────
-    # np.errstate suppresses the RuntimeWarning for 0/0 divisions
-    # np.where returns NaN wherever denominator is exactly zero (avoids nan/inf)
+    # Mask fill, nodata and out-of-range DNs
+    invalid = ~((red >= SR_DN_MIN) & (red <= SR_DN_MAX) & (nir >= SR_DN_MIN) & (nir <= SR_DN_MAX))
+    clear = qa_clear_mask(QA_IN, red.shape)
+    if clear is None:
+        print("  [WARN] QA_PIXEL not found - no cloud/shadow mask applied")
+    else:
+        invalid |= ~clear
+    print(f"  Masked pixels: {invalid.sum():,} of {invalid.size:,}")
+
+    red = red * mult + add
+    nir = nir * mult + add
+    red[invalid] = np.nan
+    nir[invalid] = np.nan
+
     with np.errstate(divide="ignore", invalid="ignore"):
-        ndvi = np.where(
-            (nir + red) == 0,
-            np.nan,
-            (nir - red) / (nir + red)   # core NDVI formula
-        )
+        ndvi = np.where((nir + red) == 0, np.nan, (nir - red) / (nir + red))
 
     # Clamp to theoretical NDVI bounds to remove any sensor noise artefacts
     ndvi = np.clip(ndvi, -1.0, 1.0)

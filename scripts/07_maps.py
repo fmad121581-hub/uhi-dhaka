@@ -32,8 +32,8 @@ from rasterio.plot import plotting_extent  # converts raster metadata to matplot
 
 # ── Path constants ─────────────────────────────────────────────────────────────
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROCESSED = os.path.join(ROOT, "data", "processed")
-OUTPUT    = os.path.join(ROOT, "data", "output")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
+OUTPUT    = os.path.join(ROOT, "data", "output_v2")
 
 LST_PATH  = os.path.join(PROCESSED, "lst_celsius.tif")
 NDVI_PATH = os.path.join(PROCESSED, "ndvi.tif")

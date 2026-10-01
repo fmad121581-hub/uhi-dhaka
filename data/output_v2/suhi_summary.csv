@@ -1,0 +1,2 @@
+urban_mean_lst,rural_mean_lst,suhi_intensity_C,ci95_low,ci95_high,n_urban_px,n_rural_px,ci_method
+30.283953859411625,27.40906258980667,2.874891269604955,2.6368943198135937,3.1036146327272505,205521,774953,"spatial block bootstrap, 3 km blocks, 2000 resamples"

@@ -1,172 +1,107 @@
-# Dhaka Urban Heat Island Analysis
+# Mapping Dhaka's surface heat island, from Landsat to ward level
 
-**Fahim Ahmed** | BUET Urban & Regional Planning (2nd Year)  
-Landsat 9 · ESA WorldCover · SRTM · WorldPop · NASA POWER  
-Python · geopandas · rasterio · scikit-learn · matplotlib
+**Fahim Ahmed** · Urban and Regional Planning, BUET
+Python · rasterio · geopandas · scikit-learn · esda · Landsat 8/9 · ESA WorldCover · WorldPop
 
----
+![Summary panel: LST, NDVI, land cover, heat deviation](data/output_v2/uhi_summary_panel.png)
 
-## Overview
+## The short version
 
-This project quantifies the Urban Heat Island (UHI) effect across the Dhaka Metropolitan Area using freely available satellite data and a fully reproducible Python pipeline. It derives Land Surface Temperature (LST) from Landsat 9 thermal imagery, correlates it with vegetation cover, land use, and population density, and maps the spatial pattern of urban heat at ward level.
+I used free satellite data to measure how much hotter built-up Dhaka is than its green fringe, which wards stay hot in every season, and what explains the pattern. It is a reproducible pipeline of eleven scripts, about 1,480 km² and 196 wards, five Landsat dates from February 2022 to June 2026.
 
-**Key findings:**
-- Urban core (Shyampur, Hazaribagh) is **~7°C hotter** than the rural fringe (Dohar, Dhamrai)
-- Built-up area shows the strongest correlation with LST (Pearson r = 0.38)
-- 45.7% of the study area retains vegetation cover despite rapid urbanisation
-- Rainfall trend shows +55.5 mm/yr increase over 2004–2023, contextualising seasonal LST variation
-
----
-
-## Study Area
-
-Dhaka Metropolitan Area, Bangladesh  
-Boundary: WGS84 (EPSG:4326) | Analysis CRS: UTM Zone 45N (EPSG:32645)  
-Landsat scene: Path 137, Row 044 | Acquisition date: 24 February 2022
-
----
-
-## Data Sources
-
-| Layer | Source | Resolution |
-|---|---|---|
-| Landsat 9 OLI/TIRS C2 L2 (Bands 4, 5, 10) | USGS EarthExplorer | 30m |
-| ESA WorldCover 2021 v2.0 | ESA / Vito | 10m |
-| SRTM DEM | USGS EarthExplorer | 30m |
-| WorldPop Population Density 2020 | WorldPop Hub | 100m |
-| GADM Admin Boundaries Level 4 | GADM v4.1 | Vector |
-| Monthly Rainfall 2004–2023 | NASA POWER MERRA-2 | Point |
-
-All data is free and publicly available. Download instructions are in `data/raw/`.
-
----
-
-## Project Structure
-
-```
-uhi_dhaka/
-├── data/
-│   ├── raw/
-│   │   ├── landsat/scene_01_dhaka/   ← Landsat 9 bands + MTL.txt
-│   │   ├── lulc/                     ← ESA WorldCover TIF
-│   │   ├── dem/                      ← SRTM 30m
-│   │   ├── population/               ← WorldPop TIF
-│   │   ├── admin/                    ← GADM Level-4 shapefile
-│   │   └── rainfall/                 ← NASA POWER monthly CSV
-│   ├── processed/                    ← clipped + reprojected rasters
-│   └── output/                       ← final maps and CSVs
-├── scripts/
-│   ├── 01_preprocess.py
-│   ├── 02_lst_derivation.py
-│   ├── 03_ndvi.py
-│   ├── 04_lulc_reclassify.py
-│   ├── 05_zonal_stats.py
-│   ├── 06_correlation.py
-│   ├── 07_maps.py
-│   └── 08_rainfall_analysis.py
-├── dhaka_boundary.shp                ← study area boundary (+ companion files)
-└── README.md
-```
-
----
-
-## Methodology
-
-### Step 1 — Preprocessing (`01_preprocess.py`)
-All rasters are clipped to the Dhaka boundary and reprojected to UTM Zone 45N (EPSG:32645). The boundary CRS is matched to each source raster before clipping to handle Landsat bands stored in UTM projection.
-
-### Step 2 — LST Derivation (`02_lst_derivation.py`)
-Land Surface Temperature is derived from Landsat 9 Band 10 (TIRS) using the Landsat Collection 2 Level-2 scale factors from the MTL metadata file. An emissivity correction is applied using the NDVI Threshold Method (Sobrino et al. 2004):
-- NDVI < 0.2 → ε = 0.97 (built-up/bare)
-- NDVI > 0.5 → ε = 0.99 (dense vegetation)
-- 0.2 ≤ NDVI ≤ 0.5 → ε estimated from fractional vegetation cover
-
-LST range: 24°C – 52°C across the study area.
-
-### Step 3 — NDVI (`03_ndvi.py`)
-NDVI = (Band 5 − Band 4) / (Band 5 + Band 4)  
-Mean NDVI: 0.178 | Vegetation cover (NDVI > 0.2): 45.7%
-
-### Step 4 — LULC Reclassification (`04_lulc_reclassify.py`)
-ESA WorldCover 11-class map reclassified into 4 classes:
-
-| Class | Area (km²) | Share |
-|---|---|---|
-| Built-up | 226.5 | 18.3% |
-| Vegetation | 937.0 | 75.7% |
-| Water | 83.5 | 6.7% |
-| Bare soil | 10.7 | 0.9% |
-
-### Step 5 — Zonal Statistics (`05_zonal_stats.py`)
-Mean LST per LULC class and per GADM Level-4 admin unit (203 units within boundary). LULC resampled from 10m to 30m to align with LST grid before comparison.
-
-| LULC Class | Mean LST |
+| Question | Answer |
 |---|---|
-| Built-up | 31.0°C |
-| Bare soil | 30.1°C |
-| Vegetation | 29.0°C |
-| Water | 27.2°C |
+| How much hotter is the urban core than the rural reference? | **2.9 to 7.1 °C**, depending on the date (95% CI on the February 2022 scene: 2.6 to 3.1 °C) |
+| Does vegetation cool the surface? | Yes. NDVI vs LST on land pixels: **r = -0.59 to -0.65** on four of five dates |
+| Is the heat spatially random? | No. Ward Moran's I = **0.84** (p = 0.001); 45 hot and 45 cold wards at p < 0.05 |
+| Which wards are always hot? | **Shyampur (Ward 90), Lalbagh (Ward 60), Sultanganj Kamrangir Char**: top 10% on all five dates, 81 to 99% built-up |
+| How many people live in the hottest areas? | About **25%** of the study-area population lives in the hottest decile of pixels (WorldPop 2020) |
+| What explains pixel temperature? | Distance from the centre (0.43), local built-up share (0.18), NDVI (0.12) |
 
-Hottest ward: **Ward No-90, Shyampur (34.3°C)**  
-Coolest ward: **Muksudpur, Dohar (26.7°C)**  
-UHI intensity: **~7.6°C**
+The heat island is not one number. Intensity ran from 2.9 °C in a dry February scene to 7.1 °C at monsoon onset, so a single-date figure would have been misleading.
 
-### Step 6 — Correlation Analysis (`06_correlation.py`)
-Sampled at a 250m regular grid (23,743 valid points). OLS regression and Pearson correlation between LST and three predictors:
+## Maps and figures
 
-| Predictor | Pearson r | R² |
-|---|---|---|
-| Built-up indicator | +0.378 | 0.143 |
-| Population density | +0.252 | 0.063 |
-| NDVI | −0.068 | 0.005 |
+| | |
+|---|---|
+| ![Ward hotspots](data/output_v2/fig_ward_hotspots.png) | ![Persistent hotspots](data/output_v2/fig_persistent_hotspots.png) |
+| Ward mean LST and Gi* hotspots (24 Feb 2022) | Wards in the top decile on every date |
+| ![Seasonal comparison](data/output_v2/fig_multidate.png) | ![Drivers](data/output_v2/fig_rf_drivers.png) |
+| SUHI, NDVI-LST correlation and mean LST by date | Random Forest driver ranking, spatial vs random CV |
 
-### Step 7 — Maps (`07_maps.py`)
-Four publication-quality PNG maps at 150 dpi: LST, NDVI, LULC, and UHI intensity summary panel.
+## Dates used
 
-### Step 8 — Rainfall Analysis (`08_rainfall_analysis.py`)
-20-year NASA POWER rainfall trend (2004–2023): mean 2,263 mm/yr, trend +55.5 mm/yr. Monsoon season (Jun–Sep) accounts for 63% of annual total. The February acquisition date falls in the dry season (mean 52 mm), when LST is highest and UHI effect is most pronounced.
+| Date | Season | Sensor | Clear sky | Mean land LST | SUHI | NDVI-LST r |
+|---|---|---|---|---|---|---|
+| 2022-02-24 | dry | L9 | 99% | 28.3 °C | 2.9 °C | -0.59 |
+| 2026-02-19 | dry | L9 | 95% | 30.1 °C | 4.5 °C | -0.65 |
+| 2025-05-07 | pre-monsoon | L9 | 87% | 35.6 °C | 4.7 °C | -0.62 |
+| 2026-06-03 | monsoon onset | L8 | 73% | 39.3 °C | 7.1 °C | -0.63 |
+| 2025-10-22 | post-monsoon | L8 | 96% | 35.4 °C | 4.2 °C | -0.38 |
 
----
+Three more scenes were rejected for cloud (10 Jul 2025: 0% clear; 27 Jun 2026: 51%; 9 Sep 2024: 53%). Dhaka is rarely visible from space in July and August, so mid-monsoon is a genuine gap.
 
-## Results
+## What went wrong the first time, and how I found it
 
-![UHI Summary Panel](data/output/uhi_summary_panel.png)
+My first version reported an NDVI-LST correlation of r = -0.07, which contradicts a large literature. I treated that as a bug report on my own work rather than a finding. Tracing it turned up seven separate problems:
 
-![Rainfall Analysis](data/output/rainfall_analysis.png)
+1. Fill pixels were not masked, which produced -124 °C values and inflated every standard deviation.
+2. An NDVI emissivity correction was applied to a surface temperature product that already includes one.
+3. NDVI was computed from raw digital numbers; the reflectance offset (-0.2) does not cancel in the ratio.
+4. Class codes and integer bands were resampled bilinearly, inventing classes at edges.
+5. Water pixels (cool, NDVI at or below zero) were mixed into the regression and flipped its sign. Removing them moved r from -0.11 to -0.58.
+6. No cloud or shadow mask.
+7. The land-cover tile ended at 24 °N, leaving 4% of the study area without data.
 
----
+The full before-and-after table is in [`CHANGELOG_v2.md`](CHANGELOG_v2.md). The first-version outputs are kept in `data/output_v1/` for comparison.
 
-## How to Reproduce
+## Method in brief
 
-### Requirements
-```
-pip install geopandas rasterio numpy pandas matplotlib scikit-learn
-```
+- **LST** from Landsat Collection 2 Level-2 `ST_B10`, cloud, shadow, cirrus and snow masked with `QA_PIXEL` (flags grown 150 m). **NDVI** from surface reflectance.
+- **SUHI** = mean LST of dense built-up land minus mean LST of rural vegetation with under 3% built-up cover nearby. Confidence interval from a spatial block bootstrap (3 km blocks).
+- **Spatial statistics**: global Moran's I and Getis-Ord Gi* on ward means, 999 permutations.
+- **Driver model**: Random Forest on 30 m pixels, scored with 3 km spatial block cross-validation (R² = 0.65). Random k-fold gives 0.75, which is how much ordinary splitting flatters the model.
+- **Persistent hotspots**: wards in the top LST decile on every usable date.
 
-### Run in order
+Full write-up: [`METHODS_RESULTS_draft.md`](METHODS_RESULTS_draft.md).
+
+## Limits worth knowing
+
+- Daytime surface temperature at about 10:30 local time, not air temperature. There is no ground validation yet.
+- Five dates, no mid-monsoon coverage, so seasonal means are not estimated.
+- The exposure and Random Forest results come from the February 2022 scene only.
+- Distance from the centre is a proxy for building height, albedo and anthropogenic heat, which I did not measure.
+- The 2004-2023 rainfall trend (`08_rainfall_analysis.py`) leans on one extreme year (2017) and is context only.
+
+## Reproduce
+
 ```bash
-python scripts/01_preprocess.py
-python scripts/02_lst_derivation.py
-python scripts/03_ndvi.py
-python scripts/04_lulc_reclassify.py
-python scripts/05_zonal_stats.py
-python scripts/06_correlation.py
-python scripts/07_maps.py
-python scripts/08_rainfall_analysis.py
+pip install rasterio geopandas scipy scikit-learn libpysal esda matplotlib pandas pyproj
+# put data under data/raw/ (see below), then
+cd scripts
+python 01_preprocess.py && python 02_lst_derivation.py && python 03_ndvi.py \
+  && python 04_lulc_reclassify.py && python 05_zonal_stats.py && python 06_correlation.py
+python 07_maps.py && python 08_rainfall_analysis.py
+python 09_deep_analysis.py && python 10_multitemporal.py && python 11_persistent_hotspots.py
 ```
 
-All paths are relative. Clone the repo, place the raw data files in the correct folders (see Data Sources above), and run the scripts in order.
+| Data | Source | Where it goes |
+|---|---|---|
+| Landsat 8/9 C2 L2 (`SR_B4`, `SR_B5`, `ST_B10`, `QA_PIXEL`, `MTL.txt`) | USGS or Microsoft Planetary Computer, path 137 row 44 | `data/raw/landsat/scene_NN_*/`, one folder per date |
+| ESA WorldCover 2021 v200, tiles N21E090 and N24E090 | ESA | `data/raw/lulc/` |
+| SRTM 30 m | USGS | `data/raw/dem/` |
+| WorldPop 2020 | WorldPop | `data/raw/population/` |
+| GADM 4.1 level 4 | GADM | `data/raw/admin/` |
+| Rainfall 2004-2023 | NASA POWER | `data/raw/rainfall/` |
 
----
+Raw rasters are not in the repository (several GB). `10_multitemporal.py` picks up every `scene_*` folder automatically.
 
-## References
+## Repository layout
 
-- Avdan, U. & Jovanovska, G. (2016). Algorithm for automated mapping of land surface temperature using Landsat 8 satellite data. *Journal of Sensors*.
-- Sobrino, J.A. et al. (2004). Land surface temperature retrieval from LANDSAT TM 5. *Remote Sensing of Environment*.
-- Weng, Q. et al. (2004). Estimation of land surface temperature with Landsat ETM+ data. *Remote Sensing of Environment*.
-- ESA WorldCover 2021 v2.0 — https://esa-worldcover.org
-- USGS Landsat Collection 2 Level-2 Science Product Guide
-
----
-
-*Part of a GIS + data science portfolio. BUET Urban & Regional Planning, 2026.*
+```
+scripts/    01-11 numbered pipeline + uhi_common.py
+data/output_v2/   figures and CSVs (current results)
+data/output_v1/   first-version outputs, kept for comparison
+CHANGELOG_v2.md   bug list and before/after numbers
+METHODS_RESULTS_draft.md   write-up
+```

@@ -38,8 +38,8 @@ from sklearn.metrics import r2_score                 # R² goodness-of-fit metri
 
 # ── Path constants ─────────────────────────────────────────────────────────────
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROCESSED = os.path.join(ROOT, "data", "processed")
-OUTPUT    = os.path.join(ROOT, "data", "output")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
+OUTPUT    = os.path.join(ROOT, "data", "output_v2")
 
 LST_PATH   = os.path.join(PROCESSED, "lst_celsius.tif")
 NDVI_PATH  = os.path.join(PROCESSED, "ndvi.tif")
@@ -264,7 +264,11 @@ def main():
         "ndvi"     : ndvi_vals,
         "pop_dens" : pop_vals,
         "buildup"  : bu_vals,
+        "lulc"     : sample_raster(LULC_PATH, coords),
     })
+    # Water is cool by day and has NDVI <= 0, so it flips the NDVI-LST sign.
+    # Report both the all-pixel and the land-only (water excluded) results.
+    df_land = df[df["lulc"] != 3].copy()
 
     # ── Step D: Compute Pearson r and OLS for each predictor ─────────────────
     print("\nCorrelation results:")
@@ -278,20 +282,21 @@ def main():
         ("buildup",  "Built-up Indicator"),
     ]
 
-    for col, label in predictor_info:
-        r, n       = pearson_r(df[col].values, df["lst"].values)
-        slope, intercept, r2 = ols_regression(df[col].values, df["lst"].values)
-
-        print(f"  {label:<25} {r:>10.4f} {slope:>10.4f} {intercept:>10.4f} {r2:>8.4f} {n:>8,}")
-
-        summary_rows.append({
-            "predictor"    : label,
-            "pearson_r"    : r,
-            "ols_slope"    : slope,
-            "ols_intercept": intercept,
-            "r_squared"    : r2,
-            "n_valid"      : n,
-        })
+    for subset, d in [("all_pixels", df), ("land_only", df_land)]:
+        print(f"  [{subset}]")
+        for col, label in predictor_info:
+            r, n       = pearson_r(d[col].values, d["lst"].values)
+            slope, intercept, r2 = ols_regression(d[col].values, d["lst"].values)
+            print(f"  {label:<25} {r:>10.4f} {slope:>10.4f} {intercept:>10.4f} {r2:>8.4f} {n:>8,}")
+            summary_rows.append({
+                "subset"       : subset,
+                "predictor"    : label,
+                "pearson_r"    : r,
+                "ols_slope"    : slope,
+                "ols_intercept": intercept,
+                "r_squared"    : r2,
+                "n_valid"      : n,
+            })
 
     # ── Step E: Save correlation summary CSV ──────────────────────────────────
     summary_df = pd.DataFrame(summary_rows)
@@ -300,7 +305,7 @@ def main():
 
     # ── Step F: Produce scatter plots ─────────────────────────────────────────
     print("\nGenerating scatter plots...")
-    make_scatter_plots(df, SCATTER_OUT)
+    make_scatter_plots(df_land, SCATTER_OUT)
 
     print("\n" + "=" * 60)
     print("Correlation analysis complete.")

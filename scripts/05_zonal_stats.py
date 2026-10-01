@@ -22,8 +22,8 @@ from rasterio.features import rasterize
 
 # Path constants
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROCESSED = os.path.join(ROOT, "data", "processed")
-OUTPUT    = os.path.join(ROOT, "data", "output")
+PROCESSED = os.path.join(ROOT, "data", "processed_v2")
+OUTPUT    = os.path.join(ROOT, "data", "output_v2")
 
 LST_PATH    = os.path.join(PROCESSED, "lst_celsius.tif")
 LULC_PATH   = os.path.join(PROCESSED, "lulc_4class.tif")

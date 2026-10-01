@@ -1,0 +1,7 @@
+subset,predictor,pearson_r,ols_slope,ols_intercept,r_squared,n_valid
+all_pixels,NDVI,-0.1132,-1.2199,28.6057,0.0128,23609
+all_pixels,Population Density,0.3858,0.0034,27.8224,0.1488,20233
+all_pixels,Built-up Indicator,0.4443,2.3631,27.6736,0.1974,23577
+land_only,NDVI,-0.5827,-6.3756,31.1645,0.3395,22199
+land_only,Population Density,0.4122,0.0033,27.9435,0.1699,19613
+land_only,Built-up Indicator,0.4888,2.1526,27.8841,0.2389,22167
